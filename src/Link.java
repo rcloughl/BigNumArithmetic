@@ -16,7 +16,7 @@ public class Link {
         return l;
     }
 
-    Link makeNext(Link lnk){
+    Link setNext(Link lnk){
         return this.l=lnk;
     }
 
