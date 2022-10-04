@@ -1,31 +1,13 @@
-public class Link {
-    private Object o;
-    private Link l;
+class Link {         // Singly linked list node class
+    private Object e;  // Value for this node
+    private Link n;    // Point to next node in list
 
-    Link(Object obj, Link lnk) {
-        this.o = obj;
-        this.l=lnk;
-    }
+    // Constructors
+    Link(Object it, Link inn) { e = it; n = inn; }
+    Link(Link inn) { e = null; n = inn; }
 
-    Link(Link lnk){
-        this.o=null;
-        this.l=lnk;
-    }
-
-    Link next(){
-        return l;
-    }
-
-    Link setNext(Link lnk){
-        return this.l=lnk;
-    }
-
-    Object getVal(){
-        return this.o;
-    }
-
-    Object setVal(Object obj){
-        return this.o=obj;
-    }
-
+    Object element() { return e; }                  // Return the value
+    Object setElement(Object it) { return e = it; } // Set element value
+    Link next() { return n; }                       // Return next link
+    Link setNext(Link inn) { return n = inn; }      // Set next link
 }
