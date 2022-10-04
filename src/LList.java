@@ -153,10 +153,10 @@ class LList implements List {
         }
     }
 
-    public int math() {
-        int total=0;
-        int num1=0;
-        int num2=0;
+    public LList math() {
+        LList total;
+        LList num1 = null;
+        LList num2 = null;
         if (this.getValue() instanceof Enum<?>) {
             Enum op = (Enum) this.getValue();
             next();
@@ -168,20 +168,14 @@ class LList implements List {
                 num2 = math();
             } else {
                 if (BigNumArithmetic.operator.Mult.equals(op)) {
-                    total = BigNumArithmetic.mult(num1, num2);
+                    total = BigNumArithmetic.mult(num1,num2);
                 } else if (BigNumArithmetic.operator.Add.equals(op)) {
                     total = BigNumArithmetic.add(num1, num2);
                 } else if (BigNumArithmetic.operator.Exp.equals(op)) {
                     total = BigNumArithmetic.exp(num1);
-                } else if (BigNumArithmetic.operator.Sub.equals(op)) {
-                    total = BigNumArithmetic.sub(num1, num2);
-                } else if (BigNumArithmetic.operator.Div.equals(op)) {
-                    total = BigNumArithmetic.div(num1, num2);
                 }
             }
-            return total;
-
         }
-        return (int)this.getValue();
+        return (LList) this.getValue();
     }
 }

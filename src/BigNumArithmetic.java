@@ -16,16 +16,33 @@ public class BigNumArithmetic {
                         eq.append(op);
                     }
                     else{
-                        eq.append(temp);
+                        LList nums = new LList();
+                        for (int i=0; i<temp.length(); i++){
+                            int numbers =  Integer.parseInt(String.valueOf(temp.charAt(i)));
+                            nums.append(numbers);
+                        }
+                        eq.append(nums);
                     }
-
                 }
                 eq.reverse();
                 eq.moveToStart();
-                int trie=eq.math();
-                System.out.println(trie);
 
+                while (!eq.isAtEnd()){
+                    if (eq.getValue() instanceof LList) {
+                        LList tL = (LList) eq.getValue();
+                        tL.moveToStart();
+                        while (!tL.isAtEnd()){
+                            System.out.println(tL.getValue());
+                            tL.next();
+                        }
+                    }
+                    else
+                    System.out.println(eq.getValue());
+                    eq.next();
+                }
 
+                //eq.math();
+                System.out.println("End");
                 in.nextLine();
             }
 
@@ -56,30 +73,48 @@ public class BigNumArithmetic {
     }
 
 
-    public static int mult(int num1, int num2){
-        int total=0;
-        return total;
+    public static LList mult(LList num1, LList num2){
+        int total;
+        return num1;
     }
 
-    public static int add(int num1, int num2){
-        int total=0;
-        return total;
+    public static LList add(LList num1, LList num2){
+        int length=0;
+        int one;
+        int two;
+        int sum;
+        int r=0;
+        if (num1.length()>= num2.length()) length= num1.length() + 1;
+        else length = num2.length() + 1;
+        LList nNum = new LList(length);
+        num1.reverse();
+        num1.moveToStart();
+        num2.reverse();
+        num2.moveToStart();
+        nNum.moveToStart();
+        while (nNum.length()<=length){
+            if (num1.isAtEnd())
+                one=0;
+            else
+                one = (int)num1.getValue();
+            if (num2.isAtEnd())
+                two=0;
+            else
+                two = (int)num2.getValue();
+            sum = one+two+r;
+            if(sum>9){
+                r=1;
+                sum-=10;
+            }
+            nNum.insert(sum);
+            num1.next();
+            num2.next();
+        }
+        return nNum;
     }
 
-    public static int exp(int num1){
+    public static LList exp(LList num1){
         int total=0;
-        return total;
+        return num1;
     }
-
-    public static int sub(int num1, int num2){
-        int total=0;
-        return total;
-    }
-
-    public static int div(int num1, int num2){
-        int total=0;
-        return total;
-    }
-
-
 }
