@@ -154,7 +154,7 @@ class LList implements List {
     }
 
     public LList math() {
-        LList total;
+        LList total = null;
         LList num1 = null;
         LList num2 = null;
         if (this.getValue() instanceof Enum<?>) {
@@ -163,19 +163,21 @@ class LList implements List {
             if (this.getValue() instanceof Enum<?>) {
                 num1 = math();
             } else
-                next();
+                num1=(LList)this.getValue();
+            next();
             if (this.getValue() instanceof Enum<?>) {
                 num2 = math();
-            } else {
-                if (BigNumArithmetic.operator.Mult.equals(op)) {
-                    total = BigNumArithmetic.mult(num1,num2);
-                } else if (BigNumArithmetic.operator.Add.equals(op)) {
-                    total = BigNumArithmetic.add(num1, num2);
-                } else if (BigNumArithmetic.operator.Exp.equals(op)) {
-                    total = BigNumArithmetic.exp(num1);
-                }
+            } else{
+                num2 = (LList)this.getValue();
+            }
+            if (BigNumArithmetic.operator.Mult.equals(op)) {
+                total = BigNumArithmetic.mult(num1,num2);
+            } else if (BigNumArithmetic.operator.Add.equals(op)) {
+                total = BigNumArithmetic.add(num1, num2);
+            } else if (BigNumArithmetic.operator.Exp.equals(op)) {
+                total = BigNumArithmetic.exp(num1,num2);
             }
         }
-        return (LList) this.getValue();
+        return total;
     }
 }

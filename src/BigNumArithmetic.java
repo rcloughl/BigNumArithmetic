@@ -7,26 +7,34 @@ public class BigNumArithmetic {
             FileInputStream file = new FileInputStream(fileName);
             Scanner in = new Scanner(file);
             while (in.hasNextLine()) {
+                Scanner ln = new Scanner(in.nextLine());
                 LList eq = new LList();
                 String temp = "";
-                while (in.hasNext()) {
-                    temp = in.next();
+                while (ln.hasNext()) {
+                    temp = ln.next();
                     Enum op=conv(temp);
                     if (op!=null){
                         eq.append(op);
                     }
                     else{
                         LList nums = new LList();
+                        Boolean leadingZ = true;
                         for (int i=0; i<temp.length(); i++){
                             int numbers =  Integer.parseInt(String.valueOf(temp.charAt(i)));
-                            nums.append(numbers);
+                            if (numbers==0 && leadingZ==true){
+                                //leading zero
+                            }
+                            else {
+                                leadingZ = false;
+                                nums.append(numbers);
+                            }
                         }
                         eq.append(nums);
                     }
                 }
                 eq.reverse();
                 eq.moveToStart();
-
+                /*
                 while (!eq.isAtEnd()){
                     if (eq.getValue() instanceof LList) {
                         LList tL = (LList) eq.getValue();
@@ -40,8 +48,12 @@ public class BigNumArithmetic {
                     System.out.println(eq.getValue());
                     eq.next();
                 }
-
-                //eq.math();
+                */
+                LList results = eq.math();
+                while (!results.isAtEnd()) {
+                    System.out.println(results.getValue());
+                    results.next();
+                }
                 System.out.println("End");
                 in.nextLine();
             }
@@ -85,14 +97,14 @@ public class BigNumArithmetic {
         int sum;
         int r=0;
         if (num1.length()>= num2.length()) length= num1.length() + 1;
-        else length = num2.length() + 1;
+        else length = num2.length() + 2;
         LList nNum = new LList(length);
         num1.reverse();
         num1.moveToStart();
         num2.reverse();
         num2.moveToStart();
-        nNum.moveToStart();
         while (nNum.length()<=length){
+            nNum.moveToStart();
             if (num1.isAtEnd())
                 one=0;
             else
@@ -113,7 +125,7 @@ public class BigNumArithmetic {
         return nNum;
     }
 
-    public static LList exp(LList num1){
+    public static LList exp(LList num1, LList num2){
         int total=0;
         return num1;
     }
