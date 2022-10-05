@@ -155,16 +155,16 @@ class LList implements List {
 
     public LList math() {
         LList total = null;
-        LList num1 = null;
-        LList num2 = null;
+        LList num1;
+        LList num2;
         if (this.getValue() instanceof Enum<?>) {
             Enum op = (Enum) this.getValue();
-            next();
+            remove();
             if (this.getValue() instanceof Enum<?>) {
                 num1 = math();
             } else
                 num1=(LList)this.getValue();
-            next();
+            remove();
             if (this.getValue() instanceof Enum<?>) {
                 num2 = math();
             } else{
@@ -177,7 +177,9 @@ class LList implements List {
             } else if (BigNumArithmetic.operator.Exp.equals(op)) {
                 total = BigNumArithmetic.exp(num1,num2);
             }
+            return total;
         }
-        return total;
+        else
+            return (LList)this.getValue();
     }
 }

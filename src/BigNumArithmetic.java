@@ -86,8 +86,45 @@ public class BigNumArithmetic {
 
 
     public static LList mult(LList num1, LList num2){
-        int total;
-        return num1;
+        int cursPow=0;
+        LList splitMult = new LList();
+        num1.moveToStart();
+        while (num1.length()>cursPow){
+            int r=0;
+            int two;
+            int place;
+            int curs=(int)num1.getValue();
+            num2.reverse();
+            num2.moveToStart();
+            LList secMult = new LList();
+            while (!num2.isAtEnd()){
+                secMult.moveToStart();
+                two=((int)num2.getValue() * curs);
+                place=(two%10)+r;
+                r=two/10;
+                if (place>9){
+                    place-=10;
+                    r++;
+                }
+                secMult.insert(place);
+                num2.next();
+            }
+            if (r!=0){
+                secMult.insert(r);
+            }
+            for (int i=0; i<cursPow; i++){
+                secMult.append(0);
+            }
+            splitMult.append(secMult);
+            cursPow++;
+            num1.next();
+        }
+        for (int i=0; i<cursPow; i++){
+            splitMult.append(operator.Add);
+        }
+
+
+        return splitMult.math();
     }
 
     public static LList add(LList num1, LList num2){
@@ -103,7 +140,7 @@ public class BigNumArithmetic {
         num1.moveToStart();
         num2.reverse();
         num2.moveToStart();
-        while (nNum.length()<=length){
+        while (nNum.length()<length){
             nNum.moveToStart();
             if (num1.isAtEnd())
                 one=0;
@@ -118,6 +155,8 @@ public class BigNumArithmetic {
                 r=1;
                 sum-=10;
             }
+            else
+                r=0;
             nNum.insert(sum);
             num1.next();
             num2.next();
