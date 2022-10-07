@@ -164,7 +164,7 @@ public class BigNumArithmetic {
     }
 
     public static LList exp(LList num1, LList num2){
-        int totalSum=0;
+      /*  int totalSum=0;
         num1.reverse();
         num1.moveToStart();
         num2.reverse();
@@ -190,7 +190,7 @@ public class BigNumArithmetic {
             int part2 = (two - 1)/2;
             totalSum = (int)Math.pow(part1, part2);
             return totalSum;
-        }
+        } */
         return num1;
     }
 }
