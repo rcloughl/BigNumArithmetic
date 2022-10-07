@@ -165,19 +165,33 @@ public class BigNumArithmetic {
     }
 
     public static LList exp(LList num1, LList num2){
-        /*int total=0;
-        int one = (int)num1.getValue();
-        int two = (int)num2.getValue();
+        int totalSum=0;
+        num1.reverse();
+        num1.moveToStart();
+        num2.reverse();
+        num2.moveToStart();
+        int one = (int) num1.getValue();
+        int two = (int) num2.getValue();
         if(one < 0) {
-            total = 1/one - two;
-            return total;
+            totalSum = 1/one - two;
+            return totalSum;
         }
         else if ( one == 0 ) {
-            return 1;
+            one = 1;
+            return one;
         }
-        return num1;
-        /
-         */
+        else if (one % 2 == 0) {
+            int part1 = (one * one);
+            int part2 = (two/2);
+            totalSum = (int)Math.pow(part1,part2);
+            return totalSum;
+        }
+        else{
+            int part1 = (one * one);
+            int part2 = (two - 1)/2;
+            totalSum = (int)Math.pow(part1, part2);
+            return totalSum;
+        }
         return num1;
     }
 }
