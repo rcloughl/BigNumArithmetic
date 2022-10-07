@@ -122,7 +122,7 @@ public class BigNumArithmetic {
             splitMult.append(operator.Add);
         }
 
-
+        splitMult.moveToStart();
         return splitMult.math();
     }
 
