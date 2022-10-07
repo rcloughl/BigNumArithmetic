@@ -2,7 +2,6 @@ import java.io.*;
 import java.util.Scanner;
 public class BigNumArithmetic {
     public static void main(String[] args) {
-        String fileName = "BignumInput-1.txt";
         try {
             FileInputStream file = new FileInputStream(args[0]);
             Scanner in = new Scanner(file);
@@ -51,10 +50,10 @@ public class BigNumArithmetic {
                 */
                 LList results = eq.math();
                 while (!results.isAtEnd()) {
-                    System.out.println(results.getValue());
+                    System.out.print(results.getValue());
                     results.next();
                 }
-                System.out.println("End");
+                System.out.println("\nEnd");
                 in.nextLine();
             }
 
