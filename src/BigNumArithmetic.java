@@ -165,7 +165,19 @@ public class BigNumArithmetic {
     }
 
     public static LList exp(LList num1, LList num2){
-        int total=0;
+        /*int total=0;
+        int one = (int)num1.getValue();
+        int two = (int)num2.getValue();
+        if(one < 0) {
+            total = 1/one - two;
+            return total;
+        }
+        else if ( one == 0 ) {
+            return 1;
+        }
+        return num1;
+        /
+         */
         return num1;
     }
 }
