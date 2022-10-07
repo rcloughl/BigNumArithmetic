@@ -4,7 +4,7 @@ public class BigNumArithmetic {
     public static void main(String[] args) {
         String fileName = "BignumInput-1.txt";
         try {
-            FileInputStream file = new FileInputStream(fileName);
+            FileInputStream file = new FileInputStream(args[0]);
             Scanner in = new Scanner(file);
             while (in.hasNextLine()) {
                 Scanner ln = new Scanner(in.nextLine());
