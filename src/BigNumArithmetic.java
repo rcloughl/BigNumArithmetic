@@ -11,19 +11,17 @@ public class BigNumArithmetic {
                 String temp = "";
                 while (ln.hasNext()) {
                     temp = ln.next();
-                    Enum op=conv(temp);
-                    if (op!=null){
+                    Enum op = conv(temp);
+                    if (op != null) {
                         eq.append(op);
-                    }
-                    else{
+                    } else {
                         LList nums = new LList();
                         Boolean leadingZ = true;
-                        for (int i=0; i<temp.length(); i++){
-                            int numbers =  Integer.parseInt(String.valueOf(temp.charAt(i)));
-                            if (numbers==0 && leadingZ==true){
+                        for (int i = 0; i < temp.length(); i++) {
+                            int numbers = Integer.parseInt(String.valueOf(temp.charAt(i)));
+                            if (numbers == 0 && leadingZ == true) {
                                 //leading zero
-                            }
-                            else {
+                            } else {
                                 leadingZ = false;
                                 nums.append(numbers);
                             }
@@ -31,32 +29,15 @@ public class BigNumArithmetic {
                         eq.append(nums);
                     }
                 }
-                eq.reverse();
                 eq.moveToStart();
-                /*
-                while (!eq.isAtEnd()){
-                    if (eq.getValue() instanceof LList) {
-                        LList tL = (LList) eq.getValue();
-                        tL.moveToStart();
-                        while (!tL.isAtEnd()){
-                            System.out.println(tL.getValue());
-                            tL.next();
-                        }
-                    }
-                    else
-                    System.out.println(eq.getValue());
-                    eq.next();
+                LList fin = math(eq);
+                fin.moveToStart();
+                while (!fin.isAtEnd()){
+                    System.out.print(fin.getValue());
+                    fin.next();
                 }
-                */
-                LList results = eq.math();
-                while (!results.isAtEnd()) {
-                    System.out.print(results.getValue());
-                    results.next();
-                }
-                System.out.println("\nEnd");
-                in.nextLine();
+                System.out.println("\nAnswer ^");
             }
-
 
         } catch (FileNotFoundException e) {
             System.out.println("File could not be found");
@@ -72,7 +53,7 @@ public class BigNumArithmetic {
         Div;
     }
 
-    public static Enum conv(String s){
+    public static operator conv(String s){
         switch (s){
             case "*" : return operator.Mult;
             case "+" : return operator.Add;
@@ -83,17 +64,60 @@ public class BigNumArithmetic {
         return null;
     }
 
+    public static LList math(LList equation) {
+
+        while (equation.length()>=3) {
+            equation.moveToStart();
+            int num1;
+            int num2;
+            int opnum;
+            LList total;
+            operator op;
+            int len = equation.length();
+            for (int i = 0; i < len - 2; i++) {
+                if (equation.get(i + 2) instanceof operator) {
+                    opnum = i + 2;
+                    if (!(equation.get(i + 1) instanceof operator)) {
+                        num2 = i + 1;
+                        if (!(equation.get(i) instanceof operator)) {
+                            num1 = i;
+                            op = (operator) equation.get(opnum);
+                            if (op == operator.Mult) {
+                                total = mult((LList) equation.get(num1), (LList) equation.get(num2));
+                            } else if (op == operator.Add) {
+                                    total = add((LList) equation.get(num1), (LList) equation.get(num2));
+                                } else if (op == operator.Exp) {
+                                    total = exp((LList) equation.get(num1), (LList) equation.get(num2));
+                                } else {
+                                    total = (LList) equation.get(i);
+                                }
+                            equation.moveToPos(num1);
+                            equation.remove();
+                            equation.remove();
+                            equation.insert(total);
+                            equation.next();
+                            equation.remove();
+                            len-=2;
+                            }
+                        }
+                    }
+                }
+            }
+        equation.moveToStart();
+        return (LList) equation.getValue();
+    }
 
     public static LList mult(LList num1, LList num2){
         int cursPow=0;
         LList splitMult = new LList();
+        num1.reverse();
         num1.moveToStart();
+        num2.reverse();
         while (num1.length()>cursPow){
             int r=0;
             int two;
             int place;
             int curs=(int)num1.getValue();
-            num2.reverse();
             num2.moveToStart();
             LList secMult = new LList();
             while (!num2.isAtEnd()){
@@ -118,12 +142,12 @@ public class BigNumArithmetic {
             cursPow++;
             num1.next();
         }
-        for (int i=0; i<cursPow; i++){
+        for (int i=0; i<cursPow-1; i++){
             splitMult.append(operator.Add);
         }
-
         splitMult.moveToStart();
-        return splitMult.math();
+        LList fin = math(splitMult);
+        return fin;
     }
 
     public static LList add(LList num1, LList num2){
@@ -132,8 +156,8 @@ public class BigNumArithmetic {
         int two;
         int sum;
         int r=0;
-        if (num1.length()>= num2.length()) length= num1.length() + 1;
-        else length = num2.length() + 2;
+        if (num1.length()>= num2.length()) length= num1.length();
+        else length = num2.length();
         LList nNum = new LList(length);
         num1.reverse();
         num1.moveToStart();

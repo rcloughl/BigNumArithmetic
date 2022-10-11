@@ -152,41 +152,4 @@ class LList implements List {
             temp.remove();
         }
     }
-
-    public LList math() {
-        LList total = null;
-        LList num1;
-        LList num2;
-        System.out.print(this.getValue());
-        System.out.println("\nEnd");
-        if (this.getValue() instanceof Enum<?>) {
-            Enum op = (Enum) this.getValue();
-            this.next();
-            if (this.getValue() instanceof Enum<?>) {
-                num1 = math();
-            } else{
-                num1=(LList)this.getValue();
-                this.remove();
-            }
-            if (this.getValue() instanceof Enum<?>) {
-                num2 = math();
-            } else{
-                num2 = (LList)this.getValue();
-                this.remove();
-            }
-            if (BigNumArithmetic.operator.Mult.equals(op)) {
-                total = BigNumArithmetic.mult(num1,num2);
-            } else if (BigNumArithmetic.operator.Add.equals(op)) {
-                total = BigNumArithmetic.add(num1, num2);
-            } else if (BigNumArithmetic.operator.Exp.equals(op)) {
-                total = BigNumArithmetic.exp(num1,num2);
-            }
-            prev();
-            this.remove();
-            this.insert(total);
-            return total;
-        }
-        else
-            return (LList)this.getValue();
-    }
 }
