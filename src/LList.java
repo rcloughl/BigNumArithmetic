@@ -107,7 +107,7 @@ class LList implements List {
     public Object getValue() throws NoSuchElementException {
         if (curr == tail) // No current element
             throw new NoSuchElementException("getvalue() in LList has current of " + curr + " and size of "
-                    + listSize + " that is not a a valid element");
+                    + listSize + " that is not a valid element");
         return curr.element();
     }
 

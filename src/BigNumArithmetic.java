@@ -14,6 +14,7 @@ public class BigNumArithmetic {
                     Enum op = conv(temp);
                     if (op != null) {
                         eq.append(op);
+                        System.out.print(temp+" ");
                     } else {
                         LList nums = new LList();
                         Boolean leadingZ = true;
@@ -26,17 +27,28 @@ public class BigNumArithmetic {
                                 nums.append(numbers);
                             }
                         }
+                        if (nums.isEmpty()){
+                            nums.append(0);
+                        }
+                        nums.moveToStart();
+                        while (!nums.isAtEnd()){
+                            System.out.print(nums.getValue());
+                            nums.next();
+                        }
+                        System.out.print(" ");
+                        nums.moveToStart();
                         eq.append(nums);
                     }
                 }
                 eq.moveToStart();
                 LList fin = math(eq);
                 fin.moveToStart();
+                System.out.print("= ");
                 while (!fin.isAtEnd()){
                     System.out.print(fin.getValue());
                     fin.next();
                 }
-                System.out.println("\nAnswer ^");
+                System.out.println();
             }
 
         } catch (FileNotFoundException e) {
@@ -49,8 +61,6 @@ public class BigNumArithmetic {
         Mult,
         Add,
         Exp,
-        Sub,
-        Div;
     }
 
     public static operator conv(String s){
@@ -58,14 +68,12 @@ public class BigNumArithmetic {
             case "*" : return operator.Mult;
             case "+" : return operator.Add;
             case "^" : return operator.Exp;
-            case "-" : return operator.Sub;
-            case "/" : return operator.Div;
         }
         return null;
     }
 
-    public static LList math(LList equation) {
 
+    public static LList math(LList equation) {
         while (equation.length()>=3) {
             equation.moveToStart();
             int num1;
@@ -113,6 +121,7 @@ public class BigNumArithmetic {
         num1.reverse();
         num1.moveToStart();
         num2.reverse();
+        num1.moveToStart();
         while (num1.length()>cursPow){
             int r=0;
             int two;
@@ -146,8 +155,7 @@ public class BigNumArithmetic {
             splitMult.append(operator.Add);
         }
         splitMult.moveToStart();
-        LList fin = math(splitMult);
-        return fin;
+        return math(splitMult);
     }
 
     public static LList add(LList num1, LList num2){
@@ -188,33 +196,46 @@ public class BigNumArithmetic {
     }
 
     public static LList exp(LList num1, LList num2){
-      /*  int totalSum=0;
-        num1.reverse();
-        num1.moveToStart();
-        num2.reverse();
-        num2.moveToStart();
-        int one = (int) num1.getValue();
-        int two = (int) num2.getValue();
-        if(one < 0) {
-            totalSum = 1/one - two;
-            return totalSum;
-        }
-        else if ( one == 0 ) {
-            one = 1;
-            return one;
-        }
-        else if (one % 2 == 0) {
-            int part1 = (one * one);
-            int part2 = (two/2);
-            totalSum = (int)Math.pow(part1,part2);
-            return totalSum;
-        }
-        else{
-            int part1 = (one * one);
-            int part2 = (two - 1)/2;
-            totalSum = (int)Math.pow(part1, part2);
-            return totalSum;
-        } */
         return num1;
     }
+
+    /*
+    public static LList exp(LList num1, LList num2){
+        String number2="";
+        num1.moveToStart();
+        num2.moveToStart();
+        while (!num2.isAtEnd()){
+            number2+=(int)num2.getValue();
+            num2.next();
+        }
+        LList sqr = mult(num1,num1);
+        int n=Integer.parseInt(number2);
+        if (n==3){
+            return mult(num1,sqr);
+        }
+        if (n==2) {
+            return sqr;
+        }
+        if (n%2==1){
+            n=((n-1)/2);
+            number2= String.valueOf(n);
+            num2.clear();
+            for (int i = 0; i < number2.length(); i++) {
+                int num = Integer.parseInt(String.valueOf(number2.charAt(i)));
+                num2.insert(num);
+            }
+            return mult(num1,(exp(sqr,num2)));
+        }
+        else{
+            n=(n/2);
+            number2= String.valueOf(n);
+            num2.clear();
+            for (int i = 0; i < number2.length(); i++) {
+                int num = Integer.parseInt(String.valueOf(number2.charAt(i)));
+                num2.insert(num);
+            }
+            return exp(sqr,num2);
+        }
+    }
+     */
 }
