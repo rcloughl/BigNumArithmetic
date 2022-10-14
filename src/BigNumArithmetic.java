@@ -1,54 +1,30 @@
 import java.io.*;
 import java.util.Scanner;
-public class BigNumArithmetic {
+public class BigNumArithmetic extends LStack {
     public static void main(String[] args) {
         try {
             FileInputStream file = new FileInputStream(args[0]);
             Scanner in = new Scanner(file);
             while (in.hasNextLine()) {
-                Scanner ln = new Scanner(in.nextLine());
-                LList eq = new LList();
-                String temp = "";
-                while (ln.hasNext()) {
-                    temp = ln.next();
-                    Enum op = conv(temp);
-                    if (op != null) {
-                        eq.append(op);
-                        System.out.print(temp+" ");
-                    } else {
-                        LList nums = new LList();
-                        Boolean leadingZ = true;
-                        for (int i = 0; i < temp.length(); i++) {
-                            int numbers = Integer.parseInt(String.valueOf(temp.charAt(i)));
-                            if (numbers == 0 && leadingZ == true) {
-                                //leading zero
-                            } else {
-                                leadingZ = false;
-                                nums.append(numbers);
-                            }
+                String line = in.nextLine();
+                if (!line.isBlank()) {
+                    String[] values = line.trim().split("\\s+");
+                    LStack numbers = new LStack();
+                    String ops = "";
+                    for (int i = 0; i < values.length; i++) {
+                        System.out.println(values[i]);
+                        if (values[i].equals("+")) {
+                            ops += ("+ ");
+                        } else if (values[i].equals("*")) {
+                            ops += ("* ");
+                        } else if (values[i].equals("^")) {
+                            ops += ("^ ");
+                        } else {
+                            numbers.push(values[i]);
                         }
-                        if (nums.isEmpty()){
-                            nums.append(0);
-                        }
-                        nums.moveToStart();
-                        while (!nums.isAtEnd()){
-                            System.out.print(nums.getValue());
-                            nums.next();
-                        }
-                        System.out.print(" ");
-                        nums.moveToStart();
-                        eq.append(nums);
                     }
+                    System.out.println("= " + math(numbers,ops));
                 }
-                eq.moveToStart();
-                LList fin = math(eq);
-                fin.moveToStart();
-                System.out.print("= ");
-                while (!fin.isAtEnd()){
-                    System.out.print(fin.getValue());
-                    fin.next();
-                }
-                System.out.println();
             }
 
         } catch (FileNotFoundException e) {
@@ -57,44 +33,94 @@ public class BigNumArithmetic {
 
     }
 
-    public enum operator{
-        Mult,
-        Add,
-        Exp,
-    }
-
-    public static operator conv(String s){
-        switch (s){
-            case "*" : return operator.Mult;
-            case "+" : return operator.Add;
-            case "^" : return operator.Exp;
+    public static String math(LStack numbers, String operators){
+        int i=0;
+        String[] ops = operators.split(" ");
+        while (numbers.length()!=1 && i<ops.length){
+            if (ops[i].equals("+")){
+                String num1 = (String) numbers.pop();
+                String num2 = (String) numbers.pop();
+                numbers.push(add(num1,num2));
+            }
+            else
+            if (ops[i].equals("*")) {
+                String num1 = (String) numbers.pop();
+                String num2 = (String) numbers.pop();
+                numbers.push(mult(num1,num2));
+            }
+            else
+            if (ops[i].equals("^")) {
+                String num1 = (String) numbers.pop();
+                String num2 = (String) numbers.pop();
+                numbers.push(exp(num1,num2));
+            }
+            else {
+                i++;
+            }
         }
-        return null;
+        return (String) numbers.pop();
     }
 
+    public static LList StrToLL(String string){
+        LList linkedlist = new LList();
+        for (int i=0; i< string.length();i++){
+            int eye = Integer.parseInt(String.valueOf(string.charAt(i)));
+            linkedlist.append(eye);
+        }
+        System.out.println(linkedlist.getValue());
+        return linkedlist;
+    }
 
+    public static String LLToStr(LList linkedlist){
+        String string="";
+        linkedlist.moveToStart();
+        while(!linkedlist.isAtEnd()){
+            string+=linkedlist.getValue();
+            linkedlist.next();
+        }
+        System.out.println(string);
+        return string;
+    }
+
+    /*
     public static LList math(LList equation) {
         while (equation.length()>=3) {
-            equation.moveToStart();
             int num1;
             int num2;
             int opnum;
             LList total;
-            operator op;
+            String op;
             int len = equation.length();
+            int bigNums=0;
+            int bigOps=0;
+            equation.moveToStart();
+            while (!equation.isAtEnd()){
+                if (equation.getValue() instanceof String){
+                    bigOps+=1;
+                }
+                else
+                    bigNums+=1;
+                equation.next();
+            }
+            if (bigOps>=bigNums) {
+                equation.clear();
+                equation.append("-1");
+                return equation;
+            }
+            equation.moveToStart();
             for (int i = 0; i < len - 2; i++) {
-                if (equation.get(i + 2) instanceof operator) {
+                if (equation.get(i + 2) instanceof String) {
                     opnum = i + 2;
-                    if (!(equation.get(i + 1) instanceof operator)) {
+                    if (!(equation.get(i + 1) instanceof String)) {
                         num2 = i + 1;
-                        if (!(equation.get(i) instanceof operator)) {
+                        if (!(equation.get(i) instanceof String)) {
                             num1 = i;
-                            op = (operator) equation.get(opnum);
-                            if (op == operator.Mult) {
+                            op = (String) equation.get(opnum);
+                            if (op.equals("*")) {
                                 total = mult((LList) equation.get(num1), (LList) equation.get(num2));
-                            } else if (op == operator.Add) {
+                            } else if (op.equals("+")) {
                                     total = add((LList) equation.get(num1), (LList) equation.get(num2));
-                                } else if (op == operator.Exp) {
+                            } else if (op.equals("^")) {
                                     total = exp((LList) equation.get(num1), (LList) equation.get(num2));
                                 } else {
                                     total = (LList) equation.get(i);
@@ -114,19 +140,22 @@ public class BigNumArithmetic {
         equation.moveToStart();
         return (LList) equation.getValue();
     }
+    */
 
-    public static LList mult(LList num1, LList num2){
+    public static String mult(String snum1, String snum2){
+        LList num1 = StrToLL(snum1);
+        LList num2 = StrToLL(snum2);
         int cursPow=0;
         LList splitMult = new LList();
         num1.reverse();
         num1.moveToStart();
         num2.reverse();
-        num1.moveToStart();
-        while (num1.length()>cursPow){
-            int r=0;
+        while (num1.length()>cursPow) {
+            int r = 0;
             int two;
             int place;
-            int curs=(int)num1.getValue();
+            int curs;
+            curs = (int) num1.getValue();
             num2.moveToStart();
             LList secMult = new LList();
             while (!num2.isAtEnd()){
@@ -152,13 +181,18 @@ public class BigNumArithmetic {
             num1.next();
         }
         for (int i=0; i<cursPow-1; i++){
-            splitMult.append(operator.Add);
+            splitMult.append("+");
         }
         splitMult.moveToStart();
-        return math(splitMult);
+        return "boy";
     }
 
-    public static LList add(LList num1, LList num2){
+
+
+
+    public static String add(String  snum1, String  snum2){
+        LList num1 = StrToLL(snum1);
+        LList num2 = StrToLL(snum2);
         int length=0;
         int one;
         int two;
@@ -192,29 +226,79 @@ public class BigNumArithmetic {
             num1.next();
             num2.next();
         }
-        return nNum;
+        String fin = LLToStr(nNum);
+        return fin;
     }
 
-    public static LList exp(LList num1, LList num2){
-        return num1;
+    //testing purposes only
+    public static String exp(String snum1, String snum2) {
+        LList num1 = StrToLL(snum1);
+        LList num2 = StrToLL(snum2);
+        LList fin = new LList();
+        String power="";
+        num1.moveToStart();
+        num2.moveToStart();
+        while (!num1.isAtEnd()){
+            System.out.println(num1.getValue());
+            num1.next();
+        }
+        num1.moveToStart();
+        while (!num2.isAtEnd()){
+            power=power+num2.getValue();
+            num2.next();
+        }
+        int pow = Integer.parseInt(power);
+        for (int i = 0; i<pow; i++){
+            fin.append(num1);
+        }
+        for (int i = 0; i<pow-1; i++){
+            fin.append("*");
+        }
+        fin.moveToStart();
+        return "boy";
     }
 
-    /*
+
+
+/*
     public static LList exp(LList num1, LList num2){
         String number2="";
         num1.moveToStart();
         num2.moveToStart();
+        while (!num1.isAtEnd()){
+            System.out.print(num1.getValue());
+            num1.next();
+        }
+        LList holder = new LList();
+        LList sqrh = new LList();
+        LList fin = new LList();
         while (!num2.isAtEnd()){
             number2+=(int)num2.getValue();
             num2.next();
         }
-        LList sqr = mult(num1,num1);
+        sqrh.append(num1);
+        sqrh.append(num1);
+        sqrh.append("*");
+        sqrh.moveToStart();
+        LList sqr = math(sqrh);
+        System.out.println(sqr.getValue());
         int n=Integer.parseInt(number2);
         if (n==3){
-            return mult(num1,sqr);
+            holder.append(num1);
+            holder.append(num1);
+            holder.append(num1);
+            holder.append("*");
+            holder.append("*");
+            holder.moveToStart();
+            return math(holder);
         }
         if (n==2) {
-            return sqr;
+            holder.append(num1);
+            holder.append(num1);
+            holder.append("*");
+            holder.moveToStart();
+            fin.append(math(holder));
+            return fin;
         }
         if (n%2==1){
             n=((n-1)/2);
@@ -224,7 +308,15 @@ public class BigNumArithmetic {
                 int num = Integer.parseInt(String.valueOf(number2.charAt(i)));
                 num2.insert(num);
             }
-            return mult(num1,(exp(sqr,num2)));
+            holder.append(num1);
+            holder.append(num1);
+            holder.append(num1);
+            holder.append("*");
+            holder.append(num2);
+            holder.append("^");
+            holder.append("*");
+            fin= math(holder);
+            return fin;
         }
         else{
             n=(n/2);
@@ -234,8 +326,17 @@ public class BigNumArithmetic {
                 int num = Integer.parseInt(String.valueOf(number2.charAt(i)));
                 num2.insert(num);
             }
-            return exp(sqr,num2);
+            holder.append(num1);
+            holder.append(num1);
+            holder.append("*");
+            holder.append(num2);
+            holder.append("^");
+            System.out.println(num2.getValue());
+            System.out.println(num1.getValue());
+            fin= math(holder);
+            return fin;
         }
     }
-     */
+
+ */
 }
