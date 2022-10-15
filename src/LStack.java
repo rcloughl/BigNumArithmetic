@@ -36,4 +36,5 @@ class LStack implements Stack {
 
     // Check if the stack is empty
     public boolean isEmpty() { return size == 0; }
+
 }
